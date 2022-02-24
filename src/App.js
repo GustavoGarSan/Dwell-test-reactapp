@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment } from "react";
+import { Outlet, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "./store/auth";
 
 function App() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.isAuthenticated);
+
+  const logoutHandler = () => {
+    dispatch(authActions.logout());
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <nav>
+        <Link to="/restaurants">Restaurants</Link>
+        {!isAuth && <Link to="/login">Login</Link>}
+        {isAuth && <button onClick={logoutHandler}>Logout</button>}
+      </nav>
+      <Outlet />
+    </Fragment>
   );
 }
 
